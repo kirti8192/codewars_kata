@@ -1,14 +1,30 @@
-def max_sequence(arr):
-    if all(num<0 for num in arr):
-        return 0
-    max_sum = 0
-    for idx in range(len(arr)):
-        run_sum = 0
-        for item_n in arr[idx:]:
-            run_sum += item_n
-            if run_sum > max_sum:
-                max_sum = run_sum
+import numpy as np
 
-    return max_sum
+def comp(array1, array2):
+	if isinstance(array1, list) & isinstance(array2, list):
+		if (array1 == array2) & (len(array1)==0):
+			return True
+	if not array1 or not array2:
+		return False
+	
+	# both arrays are valid now
+	if sorted(array1) == sorted(array2):
+		return False
 
-print(max_sequence([-2, 1, -3, 4, -1, 2, 1, -5, 4]))    # 6
+    # process array 2 first
+	if not isinstance(array2, list):
+		array2 = [array2]
+	array2 = np.sqrt(np.array(array2))
+	if any(array2%1):
+		return False
+	array2.sort()
+	array2 = array2.astype(int)
+	
+    # process array 1
+	if not isinstance(array1, list):
+		array1 = [array1]
+	array1 = np.array(array1)
+	array1 = np.abs(array1)
+	array1.sort()
+
+	return np.all(array1 == array2)
