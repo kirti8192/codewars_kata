@@ -1,52 +1,28 @@
-import itertools
+def add_to_str(fmt_str, current_range):
+    if len(current_range) == 1:
+        fmt_str.append(f'{current_range[0]}')
+    elif len(current_range) == 2:
+        fmt_str.append(f'{current_range[0]}')
+        fmt_str.append(f'{current_range[1]}')
+    else:
+        fmt_str.append(f'{current_range[0]}-{current_range[-1]}')
 
-def get_adjacent():
-    # ┌───┬───┬───┐
-    # │ 1 │ 2 │ 3 │
-    # ├───┼───┼───┤
-    # │ 4 │ 5 │ 6 │
-    # ├───┼───┼───┤
-    # │ 7 │ 8 │ 9 │
-    # └───┼───┼───┘
-    #     │ 0 │
-    #     └───┘
+    return fmt_str
 
-    adjacent_key = {
-        '1': ['1', '2', '4'], 
-        '2': ['1', '2', '3', '5'], 
-        '3': ['2', '3', '6'], 
-        '4': ['1', '4', '5', '7'], 
-        '5': ['2', '4', '5', '6', '8'], 
-        '6': ['3', '5', '6', '9'], 
-        '7': ['4', '7', '8'], 
-        '8': ['5', '7', '8', '9', '0'], 
-        '9': ['6', '8', '9'], 
-        '0': ['0', '8']
-    }
+def solution(args):
+    current_range = []
+    current_range.append(args[0])
+    fmt_str = []
+    for (x,y) in zip(args[:-1], args[1:]):
+        if x+1 == y:
+            current_range.append(y)
+        else:
+            fmt_str = add_to_str(fmt_str, current_range)
+            current_range = [y]
+        # print(fmt_str)
 
-    return adjacent_key
+    fmt_str = add_to_str(fmt_str, current_range)
 
-def get_pins(observed):
+    return ','.join(fmt_str)
 
-    num_digits = len(observed)
-    candidate_pins = []
-    adjacent_key = get_adjacent()
-
-    if not observed:
-        return []
-    
-    candidate_pins = adjacent_key[observed[0]]
-    for ii in range(1, num_digits):
-        next_adjacent_list = adjacent_key[observed[ii]]     # get adjacent list for character ii
-        candidate_pins = [item[0]+item[1] for item in itertools.product(candidate_pins, next_adjacent_list)]
-        # print(candidate_pins)
-
-    return candidate_pins
-
-print(get_pins('369'))
-
-    # [
-    #         "339","366","399","658","636","258","268","669","668","266","369","398",
-    #         "256","296","259","368","638","396","238","356","659","639","666","359",
-    #         "336","299","338","696","269","358","656","698","699","298","236","239"
-    #     ]
+print(solution([-6,-3,-2,-1,0,1,3,4,5,7,8,9,10,11,14,15,17,18,19,20]))   # '-6,-3-1,3-5,7-11,14,15,17-20')
